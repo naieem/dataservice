@@ -6,8 +6,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// ----------- route files start ------------------ //
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
+// ----------- route files ends ------------------- //
+// ---------------------- mongo connection checking ----------------- //
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -15,7 +18,7 @@ db.once('open', function() {
     console.log('mongodb connected');
     console.log('------------------------------------');
 });
-
+// ---------------------- mongo connection checking ends ------------ //
 var app = express();
 var cors = require('cors');
 // view engine setup

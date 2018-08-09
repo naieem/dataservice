@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var userModel = require('../models/user');
-
+var apiController = require('../controllers/api.controller');
+var dataGeneratorController = require('../controllers/datagenerator.controller');
+var validator = require('../middlewares/validate');
 
 router.get('/', function(req, res, next) {
     res.send(200, {
@@ -10,20 +11,12 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('/insert', function(req, res, next) {
-    var user = new userModel({
-        FirstName: req.body.FirstName,
-        LastName: req.body.LastName,
-        Email: req.body.Email
-    });
-    user.save(function name(err) {
-        if (!err) {
-            res.send(200, {
-                message: 'user inserted succesfully'
-            });
-        } else {
-            return handleError(err);
-        }
+router.post('/insert', validator.insert, function(req, res, next) {
+    apiController.insert(req).then(function(response) {
+        debugger;
+        res.send(200, response);
+    }, function(error) {
+        res.send(error);
     });
 });
 
@@ -37,6 +30,15 @@ router.get('/getAll', function(req, res, next) {
             handleError(err);
         }
     })
+});
+
+router.get('/generateData', function(req, res, next) {
+    dataGeneratorController.generateData().then((response) => {
+        debugger;
+        res.send(200, response);
+    }, (error) => {
+        res.send(500, error);
+    });
 });
 
 
